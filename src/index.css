@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Basic reset */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: theme('colors.pokebit.gray');
+}
+
+button {
+  all: unset;
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Buttons */
+.btn {
+  @apply font-retro px-4 py-2 rounded text-white transition;
+}
+
+.btn-primary {
+  @apply bg-pokebit-red hover:bg-red-600;
+}
+
+.btn-secondary {
+  @apply bg-pokebit-yellow text-black hover:bg-yellow-400;
+}
+
+.btn-outline {
+  @apply border border-pokebit-red text-pokebit-red hover:bg-pokebit-red hover:text-white;
+}
+
+/* Cards */
+.card {
+  @apply bg-white dark:bg-zinc-900 rounded-xl p-4 shadow-card transition hover:shadow-lg;
+}
+
+.card-title {
+  @apply font-retro text-lg mb-2;
+}
+
+.card-text {
+  @apply text-sm text-gray-700 dark:text-gray-300;
+}
+
+/* Detail panel */
+.panel {
+  @apply bg-white dark:bg-zinc-900 w-full sm:w-[400px] fixed top-0 right-0 h-full z-50 overflow-auto shadow-lg;
+}
+
+.panel-header {
+  @apply flex justify-between items-center p-4 border-b border-gray-200;
+}

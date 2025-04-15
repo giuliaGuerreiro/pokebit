@@ -13,7 +13,7 @@ export const usePokemonList = (limit = 20) => {
     try {
       const data = await fetchPokemonList(offset, limit);
 
-      setPokemons((prev) => [...prev, ...data]);
+      setPokemons((prev) => [...prev, ...data.results]);
       setOffset((prev) => prev + limit);
     } catch (error) {
       // TODO: Add notification toast

@@ -4,11 +4,17 @@ interface IPokemonCardProps {
   name: string;
   imageUrl: string;
   onClick?: () => void;
+  isSelected?: boolean;
 }
 
 // TODO: Add animation?
 
-export const PokemonCard: React.FC<IPokemonCardProps> = ({ name, imageUrl, onClick }) => {
+export const PokemonCard: React.FC<IPokemonCardProps> = ({
+  name,
+  imageUrl,
+  onClick,
+  isSelected = false,
+}) => {
   return (
     <div
       onClick={onClick}
@@ -18,7 +24,9 @@ export const PokemonCard: React.FC<IPokemonCardProps> = ({ name, imageUrl, onCli
       role="button"
       tabIndex={0}
       aria-label={`View details for ${name}`}
-      className="cursor-pointer border border-gray-200 rounded-xl shadow-sm p-4 hover:shadow-lg transition focus:outline-none focus:ring-2 focus:ring-gray-500"
+      className={`cursor-pointer border rounded-xl shadow-sm p-4 transition
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400
+        hover:shadow-lg ${isSelected ? 'bg-gray-200 border-gray-500' : 'bg-white border-gray-200'}`}
       data-testid="pokemon-card"
     >
       <img src={imageUrl} alt={name} className="w-32 h-32 mx-auto" />

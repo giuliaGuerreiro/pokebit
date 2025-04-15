@@ -3,11 +3,12 @@ import { usePokemonList } from '../hooks/usePokemonList';
 import { PokemonCard } from './PokemonCard';
 import { CardGrid } from './common/CardGrid';
 import { IPokemonListItem } from '../types/pokemon';
+import { PokemonDetailsPanel } from './PokemonDetailsPanel';
 
 export const PokemonList: React.FC = () => {
   const { pokemons, loadMore, loading } = usePokemonList();
   const [search, setSearch] = useState('');
-  const [pokemonSelected, setPokemonSelected] = useState<string | null>(null);
+  const [selectedPokemon, setSelectedPokemon] = useState<string | null>(null);
   const [shouldFocusNextCard, setShouldFocusNextCard] = useState(false);
 
   const lastCountRef = useRef<number>(0);
@@ -20,7 +21,7 @@ export const PokemonList: React.FC = () => {
   );
 
   const handleCardClick = (name: string) => {
-    setPokemonSelected((prev) => (prev === name ? null : name));
+    setSelectedPokemon((prev) => (prev === name ? null : name));
   };
 
   const handleLoadMore = () => {
@@ -76,13 +77,17 @@ export const PokemonList: React.FC = () => {
               <PokemonCard
                 name={pokemon.name}
                 imageUrl={`https://img.pokemondb.net/sprites/home/normal/${pokemon.name}.png`}
-                isSelected={pokemonSelected === pokemon.name}
+                isSelected={selectedPokemon === pokemon.name}
                 onClick={() => handleCardClick(pokemon.name)}
                 cardRef={isFirstNew ? newItemRef : undefined}
               />
             );
           }}
         />
+
+        {selectedPokemon && (
+          <PokemonDetailsPanel name={selectedPokemon} onClose={() => setSelectedPokemon(null)} />
+        )}
       </div>
     </div>
   );

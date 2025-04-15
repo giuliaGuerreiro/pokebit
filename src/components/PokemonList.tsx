@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePokemonList } from '../hooks/usePokemonList';
 import { PokemonCard } from './PokemonCard';
 import { CardGrid } from './common/CardGrid';
@@ -10,6 +10,11 @@ export const PokemonList: React.FC = () => {
 
   const [pokemonSelected, setPokemonSelected] = useState<string | null>(null);
 
+  const lastCountRef = useRef<number>(0);
+  const newItemRef = useRef<HTMLDivElement | null>(null);
+
+  const [shouldFocusNextCard, setShouldFocusNextCard] = useState(false);
+
   const handleCardClick = (name: string) => {
     setPokemonSelected((prev) => (prev === name ? null : name));
   };
@@ -19,6 +24,24 @@ export const PokemonList: React.FC = () => {
   const filteredPokemons: IPokemonListItem[] = pokemons.filter((pokemon) =>
     pokemon.name.toLowerCase().includes(search.toLowerCase())
   );
+
+  const handleLoadMore = () => {
+    const active = document.activeElement;
+    const isLoadMoreClick = active?.getAttribute('aria-label') === 'Load more items';
+
+    lastCountRef.current = filteredPokemons.length;
+
+    setShouldFocusNextCard(isLoadMoreClick);
+    loadMore();
+  };
+
+  useEffect(() => {
+    if (!loading && shouldFocusNextCard && newItemRef.current) {
+      newItemRef.current.focus();
+      newItemRef.current = null;
+      setShouldFocusNextCard(false);
+    }
+  }, [loading, shouldFocusNextCard]);
 
   return (
     <div>
@@ -36,15 +59,21 @@ export const PokemonList: React.FC = () => {
       <CardGrid
         items={filteredPokemons}
         isLoading={loading}
-        onLoadMore={loadMore}
-        renderItem={(pokemon) => (
-          <PokemonCard
-            name={pokemon.name}
-            imageUrl={`https://img.pokemondb.net/sprites/home/normal/${pokemon.name}.png`}
-            isSelected={pokemonSelected === pokemon.name}
-            onClick={() => handleCardClick(pokemon.name)}
-          />
-        )}
+        onLoadMore={handleLoadMore}
+        renderItem={(pokemon, index) => {
+          const isFirstNew =
+            index === lastCountRef.current && index >= 0 && index < filteredPokemons.length;
+
+          return (
+            <PokemonCard
+              name={pokemon.name}
+              imageUrl={`https://img.pokemondb.net/sprites/home/normal/${pokemon.name}.png`}
+              isSelected={pokemonSelected === pokemon.name}
+              onClick={() => handleCardClick(pokemon.name)}
+              cardRef={isFirstNew ? newItemRef : undefined}
+            />
+          );
+        }}
       />
     </div>
   );

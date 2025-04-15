@@ -1,11 +1,7 @@
-import axios from 'axios';
-import { IPokemonListResponse } from '../types/pokemon';
+import { IPokemonListItem } from '../types/pokemon';
+import { pokeClient } from './pokeClient';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
-export async function fetchPokemonList(offset = 0, limit = 20): Promise<IPokemonListResponse> {
-  const response = await axios.get<IPokemonListResponse>(`${API_BASE_URL}/pokemon`, {
-    params: { offset, limit },
-  });
-  return response.data;
+export async function fetchPokemonList(offset = 0, limit = 20): Promise<IPokemonListItem[]> {
+  const response = await pokeClient.listPokemons(offset, limit);
+  return response.results;
 }

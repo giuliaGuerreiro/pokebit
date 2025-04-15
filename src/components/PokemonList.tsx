@@ -43,6 +43,7 @@ export const PokemonList: React.FC = () => {
 
   return (
     <div className="mt-4">
+      {/* TODO: MAKE REUSABLE SEARCH INPUT */}
       <label htmlFor="search" className="sr-only">
         Search for a Pokémon
       </label>
@@ -50,7 +51,7 @@ export const PokemonList: React.FC = () => {
         id="search"
         type="search"
         placeholder="Search Pokémon"
-        className="w-full mb-4 px-3 py-2 border rounded"
+        className="w-full mb-4 px-3 py-2 border rounded-xl"
         value={search}
         onChange={(event) => setSearch(event.target.value)}
       />

@@ -44,13 +44,13 @@ const Header: React.FC = () => {
         </nav>
 
         {/* Avatar */}
-        <div
+        <span
           className="w-8 h-8 rounded-full bg-gray-400 dark:bg-gray-600 flex items-center justify-center font-bold text-xs"
           role="img"
           aria-label="User avatar"
         >
           A
-        </div>
+        </span>
 
         {/* Mobile Menu Button */}
         <button
@@ -77,6 +77,7 @@ const Header: React.FC = () => {
                 to={path}
                 onClick={closeMenu}
                 role="menuitem"
+                aria-current={location.pathname === path ? 'page' : undefined}
                 className={`block px-4 py-2 font-sans text-sm hover:bg-gray-100 dark:hover:bg-zinc-700 focus-visible:outline focus-visible:outline-2 ${
                   location.pathname === path ? 'font-bold' : ''
                 }`}

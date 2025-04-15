@@ -2,7 +2,7 @@ import React from 'react';
 
 type CardGridProps<T> = {
   items: T[];
-  renderItem: (item: T) => React.ReactNode;
+  renderItem: (item: T, index: number) => React.ReactNode;
   isLoading?: boolean;
   onLoadMore?: () => void;
 };
@@ -27,7 +27,7 @@ export function CardGrid<T extends { id?: string | number }>({
       >
         {items.map((item, index) => (
           <div key={item.id ?? index} role="listitem">
-            {renderItem(item)}
+            {renderItem(item, index)}
           </div>
         ))}
       </div>

@@ -11,6 +11,8 @@ type CardGridProps<T> = {
 // TODO: Add skeleton
 // TODO: Add Loader within Load more button
 
+// TODO: Only show Load button when length > 0
+
 export function CardGrid<T extends { id?: string | number }>({
   items,
   renderItem,
@@ -33,7 +35,7 @@ export function CardGrid<T extends { id?: string | number }>({
       {onLoadMore && (
         <button
           onClick={onLoadMore}
-          className="btn-primary mt-4 mx-auto flex items-center justify-center gap-2 px-4 py-2 rounded"
+          className="btn-primary mt-4 mx-auto flex items-center justify-center gap-2 px-4 py-2 rounded  focus-visible:outline focus-visible:outline-2"
           aria-label="Load more items"
           disabled={isLoading}
         >

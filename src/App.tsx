@@ -8,7 +8,7 @@ const App: React.FC = () => {
     <div className="p-4">
       <Header />
 
-      <main className="p-4">
+      <main className="p-4" role="main">
         <Routes>
           <Route path="/" element={<Home />} />
         </Routes>

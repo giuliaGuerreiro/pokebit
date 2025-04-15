@@ -42,13 +42,13 @@ export const PokemonList: React.FC = () => {
   }, [loading, shouldFocusNextCard]);
 
   return (
-    <main role="main" className="mt-4">
+    <div className="mt-4">
       <label htmlFor="search" className="sr-only">
         Search for a Pokémon
       </label>
       <input
         id="search"
-        type="text"
+        type="search"
         placeholder="Search Pokémon"
         className="w-full mb-4 px-3 py-2 border rounded"
         value={search}
@@ -79,6 +79,6 @@ export const PokemonList: React.FC = () => {
           );
         }}
       />
-    </main>
+    </div>
   );
 };

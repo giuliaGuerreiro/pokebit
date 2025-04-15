@@ -7,23 +7,21 @@ import { IPokemonListItem } from '../types/pokemon';
 export const PokemonList: React.FC = () => {
   const { pokemons, loadMore, loading } = usePokemonList();
   const [search, setSearch] = useState('');
-
   const [pokemonSelected, setPokemonSelected] = useState<string | null>(null);
+  const [shouldFocusNextCard, setShouldFocusNextCard] = useState(false);
 
   const lastCountRef = useRef<number>(0);
   const newItemRef = useRef<HTMLDivElement | null>(null);
-
-  const [shouldFocusNextCard, setShouldFocusNextCard] = useState(false);
-
-  const handleCardClick = (name: string) => {
-    setPokemonSelected((prev) => (prev === name ? null : name));
-  };
 
   // TODO: Improve accessibility
   // TODO: Pass filter to API
   const filteredPokemons: IPokemonListItem[] = pokemons.filter((pokemon) =>
     pokemon.name.toLowerCase().includes(search.toLowerCase())
   );
+
+  const handleCardClick = (name: string) => {
+    setPokemonSelected((prev) => (prev === name ? null : name));
+  };
 
   const handleLoadMore = () => {
     const active = document.activeElement;
@@ -44,7 +42,10 @@ export const PokemonList: React.FC = () => {
   }, [loading, shouldFocusNextCard]);
 
   return (
-    <div>
+    <main role="main" className="mt-4">
+      <label htmlFor="search" className="sr-only">
+        Search for a Pokémon
+      </label>
       <input
         id="search"
         type="text"
@@ -56,6 +57,9 @@ export const PokemonList: React.FC = () => {
 
       {/* TODO: Add option to try fetching again when error */}
       {/* TODO: Add url within .env */}
+      <div aria-live="polite" className="sr-only">
+        {loading ? 'Loading more Pokémons...' : ''}
+      </div>
       <CardGrid
         items={filteredPokemons}
         isLoading={loading}
@@ -75,6 +79,6 @@ export const PokemonList: React.FC = () => {
           );
         }}
       />
-    </div>
+    </main>
   );
 };

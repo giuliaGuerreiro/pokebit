@@ -5,10 +5,10 @@ import Home from './pages/Home';
 
 const App: React.FC = () => {
   return (
-    <div className="p-4">
+    <div className="h-screen flex flex-col p-2 sm:p-4">
       <Header />
 
-      <main className="p-4" role="main">
+      <main className="flex-1 overflow-hidden">
         <Routes>
           <Route path="/" element={<Home />} />
         </Routes>

@@ -20,10 +20,10 @@ export function CardGrid<T extends { id?: string | number }>({
   onLoadMore,
 }: CardGridProps<T>) {
   return (
-    <>
+    <div className="h-full flex flex-col overflow-hidden">
       <div
         role="list"
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+        className="flex-1 overflow-y-auto pr-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
       >
         {items.map((item, index) => (
           <div key={item.id ?? index} role="listitem">
@@ -35,7 +35,7 @@ export function CardGrid<T extends { id?: string | number }>({
       {onLoadMore && (
         <button
           onClick={onLoadMore}
-          className="btn-primary mt-4 mx-auto flex items-center justify-center gap-2 px-4 py-2 rounded  focus-visible:outline focus-visible:outline-2"
+          className="btn-primary mt-2 mb-2 mx-auto flex items-center justify-center gap-2 px-4 py-2 rounded  focus-visible:outline focus-visible:outline-2"
           aria-label="Load more items"
           disabled={isLoading}
         >
@@ -48,10 +48,10 @@ export function CardGrid<T extends { id?: string | number }>({
               Loading...
             </>
           ) : (
-            'Load More'
+            'Load More Pokemons'
           )}
         </button>
       )}
-    </>
+    </div>
   );
 }

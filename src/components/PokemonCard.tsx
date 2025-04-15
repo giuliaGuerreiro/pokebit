@@ -5,6 +5,7 @@ interface IPokemonCardProps {
   imageUrl: string;
   onClick?: () => void;
   isSelected?: boolean;
+  cardRef?: React.RefObject<HTMLDivElement | null>;
 }
 
 // TODO: Add animation?
@@ -14,9 +15,11 @@ export const PokemonCard: React.FC<IPokemonCardProps> = ({
   imageUrl,
   onClick,
   isSelected = false,
+  cardRef,
 }) => {
   return (
     <div
+      ref={cardRef}
       onClick={onClick}
       onKeyDown={(event) => {
         if (event.key === 'Enter' || event.key === ' ') onClick?.();

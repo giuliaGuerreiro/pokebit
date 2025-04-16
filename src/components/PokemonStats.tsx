@@ -53,7 +53,7 @@ export const PokemonStats: React.FC<IPokemonStatsProps> = ({ name }) => {
     <div className="flex flex-col">
       {/* Pokemon Image and Info */}
       <section className="relative mb-6">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-100 dark:to-zinc-800 opacity-30 rounded-lg"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-100  opacity-30 rounded-lg"></div>
 
         {imageUrl && (
           <motion.img
@@ -87,11 +87,11 @@ export const PokemonStats: React.FC<IPokemonStatsProps> = ({ name }) => {
       {/* Physical attributes */}
       <section className="grid grid-cols-2 gap-4 mb-6">
         <div className="card text-center">
-          <span className="text-gray-500 dark:text-gray-300 text-sm">Height</span>
+          <span className="text-gray-500  text-sm">Height</span>
           <p className="font-medium text-lg">{heightInMeters} m</p>
         </div>
         <div className="card text-center">
-          <span className="text-gray-500 dark:text-gray-300 text-sm">Weight</span>
+          <span className="text-gray-500  text-sm">Weight</span>
           <p className="font-medium text-lg">{weightInKg} kg</p>
         </div>
       </section>
@@ -103,7 +103,7 @@ export const PokemonStats: React.FC<IPokemonStatsProps> = ({ name }) => {
           {data.abilities.map((ability) => (
             <span
               key={ability.ability.name}
-              className="bg-gray-200 dark:bg-zinc-700 px-3 py-1 rounded-lg text-sm capitalize"
+              className="bg-gray-200  px-3 py-1 rounded-lg text-sm capitalize"
             >
               {ability.ability.name.replace('-', ' ')}
               {ability.is_hidden && <span className="text-xs ml-1 text-gray-500">(Hidden)</span>}
@@ -122,7 +122,7 @@ export const PokemonStats: React.FC<IPokemonStatsProps> = ({ name }) => {
                 {STAT_NAMES[stat.stat.name as PokemonStat] || stat.stat.name}
               </span>
               <span className="w-8 text-sm text-right mr-2">{stat.base_stat}</span>
-              <div className="flex-1 bg-gray-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
+              <div className="flex-1 bg-gray-200  rounded-full h-2 overflow-hidden">
                 <motion.div
                   className="h-full bg-pokebit-yellow"
                   initial={{ width: 0 }}

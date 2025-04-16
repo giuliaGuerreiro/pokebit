@@ -16,7 +16,7 @@ const Header: React.FC = () => {
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <header className="bg-pokebit-yellow text-black dark:bg-zinc-800 dark:text-white shadow-md">
+    <header className="bg-pokebit-yellow text-black  shadow-md">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between relative">
         {/* Logo */}
         <Link
@@ -45,7 +45,7 @@ const Header: React.FC = () => {
 
         {/* Avatar */}
         <span
-          className="w-8 h-8 rounded-full bg-gray-400 dark:bg-gray-600 flex items-center justify-center font-bold text-xs"
+          className="w-8 h-8 rounded-full bg-gray-400  flex items-center justify-center font-bold text-xs"
           role="img"
           aria-label="User avatar"
         >
@@ -69,7 +69,7 @@ const Header: React.FC = () => {
             id="mobile-nav"
             role="menu"
             aria-label="Mobile navigation"
-            className="absolute top-full right-0 mt-2 bg-white dark:bg-zinc-800 border rounded shadow-md w-40 sm:hidden z-50"
+            className="absolute top-full right-0 mt-2 bg-white  border rounded shadow-md w-40 sm:hidden z-50"
           >
             {navLinks.map(({ name, path }) => (
               <Link
@@ -78,7 +78,7 @@ const Header: React.FC = () => {
                 onClick={closeMenu}
                 role="menuitem"
                 aria-current={location.pathname === path ? 'page' : undefined}
-                className={`block px-4 py-2 font-sans text-sm hover:bg-gray-100 dark:hover:bg-zinc-700 focus-visible:outline focus-visible:outline-2 ${
+                className={`block px-4 py-2 font-sans text-sm hover:bg-gray-100  focus-visible:outline focus-visible:outline-2 ${
                   location.pathname === path ? 'font-bold' : ''
                 }`}
               >

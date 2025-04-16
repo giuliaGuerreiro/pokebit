@@ -43,7 +43,7 @@ export const PokemonList: React.FC = () => {
   }, [loading, shouldFocusNextCard]);
 
   return (
-    <div className="flex h-full pt-4 overflow-hidden">
+    <div className="flex h-full pt-4 overflow-hidden gap-4">
       {/* Main content - shrinks when details panel is open */}
       <motion.div
         className="flex flex-col overflow-hidden"

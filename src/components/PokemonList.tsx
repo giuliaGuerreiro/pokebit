@@ -64,26 +64,28 @@ export const PokemonList: React.FC = () => {
       <div aria-live="polite" className="sr-only">
         {loading ? 'Loading more Pokémons...' : ''}
       </div>
-      <div className="flex-1 overflow-hidden">
-        <CardGrid
-          items={filteredPokemons}
-          isLoading={loading}
-          onLoadMore={handleLoadMore}
-          renderItem={(pokemon, index) => {
-            const isFirstNew =
-              index === lastCountRef.current && index >= 0 && index < filteredPokemons.length;
+      <div className="flex flex-col md:flex-row gap-4 h-[calc(100vh-160px)]">
+        <div className="flex-1 overflow-auto pr-1">
+          <CardGrid
+            items={filteredPokemons}
+            isLoading={loading}
+            onLoadMore={handleLoadMore}
+            renderItem={(pokemon, index) => {
+              const isFirstNew =
+                index === lastCountRef.current && index >= 0 && index < filteredPokemons.length;
 
-            return (
-              <PokemonCard
-                name={pokemon.name}
-                imageUrl={`https://img.pokemondb.net/sprites/home/normal/${pokemon.name}.png`}
-                isSelected={selectedPokemon === pokemon.name}
-                onClick={() => handleCardClick(pokemon.name)}
-                cardRef={isFirstNew ? newItemRef : undefined}
-              />
-            );
-          }}
-        />
+              return (
+                <PokemonCard
+                  name={pokemon.name}
+                  imageUrl={`https://img.pokemondb.net/sprites/home/normal/${pokemon.name}.png`}
+                  isSelected={selectedPokemon === pokemon.name}
+                  onClick={() => handleCardClick(pokemon.name)}
+                  cardRef={isFirstNew ? newItemRef : undefined}
+                />
+              );
+            }}
+          />
+        </div>
 
         {selectedPokemon && (
           <PokemonDetailsPanel name={selectedPokemon} onClose={() => setSelectedPokemon(null)} />

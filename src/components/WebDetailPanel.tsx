@@ -8,7 +8,7 @@ interface IWebDetailPanelProps {
 
 export const WebDetailPanel: React.FC<IWebDetailPanelProps> = ({ name, onClose }) => (
   <motion.div
-    className="fixed right-0 top-0 h-full w-[400px] bg-white dark:bg-zinc-800 shadow-lg p-6 z-50"
+    className="h-full w-[400px] bg-white dark:bg-zinc-800 shadow-lg p-6 z-50"
     initial={{ x: '100%' }}
     animate={{ x: 0 }}
     exit={{ x: '100%' }}

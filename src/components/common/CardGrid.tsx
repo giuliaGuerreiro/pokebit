@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from './Button';
 
 type CardGridProps<T> = {
   items: T[];
@@ -34,24 +35,16 @@ export function CardGrid<T extends { id?: string | number }>({
 
       {onLoadMore && (
         <div className="shrink-0 py-2">
-          <button
+          <Button
             onClick={onLoadMore}
-            className="btn-primary mt-2 mb-2 mx-auto flex items-center justify-center gap-2 px-4 py-2 rounded  focus-visible:outline focus-visible:outline-2"
-            aria-label="Load more items"
-            disabled={isLoading}
+            variant="primary"
+            size="sm"
+            width="w-40"
+            isLoading={isLoading}
+            isCentralized
           >
-            {isLoading ? (
-              <>
-                <span
-                  className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"
-                  aria-hidden="true"
-                />
-                Loading...
-              </>
-            ) : (
-              'Load More Pokemons'
-            )}
-          </button>
+            {isLoading ? 'Loading...' : 'Load More Pokemons'}
+          </Button>
         </div>
       )}
     </div>

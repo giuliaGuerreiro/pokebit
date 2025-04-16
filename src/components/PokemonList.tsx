@@ -14,7 +14,6 @@ export const PokemonList: React.FC = () => {
   const lastCountRef = useRef<number>(0);
   const newItemRef = useRef<HTMLDivElement | null>(null);
 
-  // TODO: Improve accessibility
   // TODO: Pass filter to API
   const filteredPokemons: IPokemonListItem[] = pokemons.filter((pokemon) =>
     pokemon.name.toLowerCase().includes(search.toLowerCase())
@@ -43,7 +42,7 @@ export const PokemonList: React.FC = () => {
   }, [loading, shouldFocusNextCard]);
 
   return (
-    <div className="flex flex-col h-full pt-4">
+    <div className="flex flex-col h-full pt-4 overflow-hidden">
       {/* TODO: MAKE REUSABLE SEARCH INPUT */}
       <div className="shrink-0 mb-4">
         <label htmlFor="search" className="sr-only">
@@ -64,33 +63,32 @@ export const PokemonList: React.FC = () => {
       <div aria-live="polite" className="sr-only">
         {loading ? 'Loading more Pokémons...' : ''}
       </div>
-      <div className="flex flex-col md:flex-row gap-4 h-[calc(100vh-160px)]">
-        <div className="flex-1 overflow-auto pr-1">
-          <CardGrid
-            items={filteredPokemons}
-            isLoading={loading}
-            onLoadMore={handleLoadMore}
-            renderItem={(pokemon, index) => {
-              const isFirstNew =
-                index === lastCountRef.current && index >= 0 && index < filteredPokemons.length;
 
-              return (
-                <PokemonCard
-                  name={pokemon.name}
-                  imageUrl={`https://img.pokemondb.net/sprites/home/normal/${pokemon.name}.png`}
-                  isSelected={selectedPokemon === pokemon.name}
-                  onClick={() => handleCardClick(pokemon.name)}
-                  cardRef={isFirstNew ? newItemRef : undefined}
-                />
-              );
-            }}
-          />
-        </div>
+      <div className="flex-1 overflow-hidden">
+        <CardGrid
+          items={filteredPokemons}
+          isLoading={loading}
+          onLoadMore={handleLoadMore}
+          renderItem={(pokemon, index) => {
+            const isFirstNew =
+              index === lastCountRef.current && index >= 0 && index < filteredPokemons.length;
 
-        {selectedPokemon && (
-          <PokemonDetailsPanel name={selectedPokemon} onClose={() => setSelectedPokemon(null)} />
-        )}
+            return (
+              <PokemonCard
+                name={pokemon.name}
+                imageUrl={`https://img.pokemondb.net/sprites/home/normal/${pokemon.name}.png`}
+                isSelected={selectedPokemon === pokemon.name}
+                onClick={() => handleCardClick(pokemon.name)}
+                cardRef={isFirstNew ? newItemRef : undefined}
+              />
+            );
+          }}
+        />
       </div>
+
+      {selectedPokemon && (
+        <PokemonDetailsPanel name={selectedPokemon} onClose={() => setSelectedPokemon(null)} />
+      )}
     </div>
   );
 };

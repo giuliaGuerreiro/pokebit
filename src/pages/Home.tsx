@@ -2,7 +2,7 @@ import { PokemonList } from '../components/PokemonList';
 
 const Home: React.FC = () => {
   return (
-    <div className="flex flex-col h-full px-2 py-4">
+    <div className="flex flex-col h-full px-2 py-4 overflow-hidden">
       <h1 id="pokemon-heading" className="font-retro text-xl shrink-0">
         Pokémon List
       </h1>

@@ -5,6 +5,7 @@ import { CardGrid } from './common/CardGrid';
 import { PokemonDetailsPanel } from './PokemonDetailsPanel';
 import { motion, AnimatePresence } from 'framer-motion';
 import SearchInput from './common/SearchInput';
+import Button from './common/Button';
 
 export const PokemonList: React.FC = () => {
   const { pokemons, loadMore, loading, searchPokemons, resetSearch, isSearching } =
@@ -69,7 +70,7 @@ export const PokemonList: React.FC = () => {
         transition={{ duration: 0.4, ease: 'easeInOut' }}
       >
         {/* Search input area */}
-        <div className="shrink-0 mb-4 p-1 flex gap-2">
+        <div className="shrink-0 mb-4 p-1 flex items-center gap-2">
           <SearchInput
             id="search"
             placeholder="Search Pokémon"
@@ -79,19 +80,9 @@ export const PokemonList: React.FC = () => {
             onKeyDown={handleKeyDown}
             label="Search for a Pokémon"
           />
-          {/* TODO: MAKE REUSABLE BUTTON */}
-          <button
-            onClick={handleSearch}
-            className="btn-primary shrink-0 px-4 py-2 rounded-xl"
-            aria-label="Search Pokémon"
-          >
+          <Button onClick={handleSearch} variant="primary" aria-label="Search Pokémon">
             Search
-          </button>
-        </div>
-
-        {/* Accessibility announcement */}
-        <div aria-live="polite" className="sr-only">
-          {loading ? 'Loading more Pokémons...' : ''}
+          </Button>
         </div>
 
         {/* TODO: Add option to try fetching again when error */}

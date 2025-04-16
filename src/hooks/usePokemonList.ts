@@ -33,9 +33,6 @@ export const usePokemonList = (limit = 20) => {
       const currentIsSearching = isSearchingRef.current;
       const currentAllSearchedPokemons = allSearchedPokemonsRef.current;
 
-      console.log('offset', currentOffset);
-      console.log('isSearching', currentIsSearching);
-
       if (currentIsSearching) {
         const nextBatch = currentAllSearchedPokemons.slice(currentOffset, currentOffset + limit);
         setPokemons((prev) => [...prev, ...nextBatch]);

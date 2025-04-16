@@ -4,6 +4,7 @@ import { PokemonCard } from './PokemonCard';
 import { CardGrid } from './common/CardGrid';
 import { IPokemonListItem } from '../types/pokemon';
 import { PokemonDetailsPanel } from './PokemonDetailsPanel';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const PokemonList: React.FC = () => {
   const { pokemons, loadMore, loading } = usePokemonList();
@@ -42,53 +43,69 @@ export const PokemonList: React.FC = () => {
   }, [loading, shouldFocusNextCard]);
 
   return (
-    <div className="flex flex-col h-full pt-4 overflow-hidden">
-      {/* TODO: MAKE REUSABLE SEARCH INPUT */}
-      <div className="shrink-0 mb-4">
-        <label htmlFor="search" className="sr-only">
-          Search for a Pokémon
-        </label>
-        <input
-          id="search"
-          type="search"
-          placeholder="Search Pokémon"
-          className="w-full px-3 py-2 border rounded-xl"
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-        />
-      </div>
+    <div className="flex h-full pt-4 overflow-hidden">
+      {/* Main content - shrinks when details panel is open */}
+      <motion.div
+        className="flex flex-col overflow-hidden"
+        layout
+        animate={{
+          flex: selectedPokemon ? '1 1 auto' : '1 1 100%',
+        }}
+        transition={{ duration: 0.4, ease: 'easeInOut' }}
+      >
+        {/* TODO: MAKE REUSABLE SEARCH INPUT */}
+        {/* Search input */}
+        <div className="shrink-0 mb-4">
+          <label htmlFor="search" className="sr-only">
+            Search for a Pokémon
+          </label>
+          <input
+            id="search"
+            type="search"
+            placeholder="Search Pokémon"
+            className="w-full px-3 py-2 border rounded-xl"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+          />
+        </div>
 
-      {/* TODO: Add option to try fetching again when error */}
-      {/* TODO: Add url within .env */}
-      <div aria-live="polite" className="sr-only">
-        {loading ? 'Loading more Pokémons...' : ''}
-      </div>
+        {/* Accessibility announcement */}
+        <div aria-live="polite" className="sr-only">
+          {loading ? 'Loading more Pokémons...' : ''}
+        </div>
 
-      <div className="flex-1 overflow-hidden">
-        <CardGrid
-          items={filteredPokemons}
-          isLoading={loading}
-          onLoadMore={handleLoadMore}
-          renderItem={(pokemon, index) => {
-            const isFirstNew =
-              index === lastCountRef.current && index >= 0 && index < filteredPokemons.length;
+        {/* TODO: Add option to try fetching again when error */}
+        {/* TODO: Add url within .env */}
+        {/* Cards grid container */}
+        <div className="flex-1 overflow-hidden">
+          <CardGrid
+            items={filteredPokemons}
+            isLoading={loading}
+            onLoadMore={handleLoadMore}
+            renderItem={(pokemon, index) => {
+              const isFirstNew =
+                index === lastCountRef.current && index >= 0 && index < filteredPokemons.length;
 
-            return (
-              <PokemonCard
-                name={pokemon.name}
-                imageUrl={`https://img.pokemondb.net/sprites/home/normal/${pokemon.name}.png`}
-                isSelected={selectedPokemon === pokemon.name}
-                onClick={() => handleCardClick(pokemon.name)}
-                cardRef={isFirstNew ? newItemRef : undefined}
-              />
-            );
-          }}
-        />
-      </div>
+              return (
+                <PokemonCard
+                  name={pokemon.name}
+                  imageUrl={`https://img.pokemondb.net/sprites/home/normal/${pokemon.name}.png`}
+                  isSelected={selectedPokemon === pokemon.name}
+                  onClick={() => handleCardClick(pokemon.name)}
+                  cardRef={isFirstNew ? newItemRef : undefined}
+                />
+              );
+            }}
+          />
+        </div>
+      </motion.div>
 
-      {selectedPokemon && (
-        <PokemonDetailsPanel name={selectedPokemon} onClose={() => setSelectedPokemon(null)} />
-      )}
+      {/* Details panel with animation */}
+      <AnimatePresence>
+        {selectedPokemon && (
+          <PokemonDetailsPanel name={selectedPokemon} onClose={() => setSelectedPokemon(null)} />
+        )}
+      </AnimatePresence>
     </div>
   );
 };

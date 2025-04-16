@@ -96,6 +96,5 @@ export const usePokemonList = (limit = 20) => {
     searchPokemons,
     resetSearch,
     searchTerm,
-    isSearching,
   };
 };

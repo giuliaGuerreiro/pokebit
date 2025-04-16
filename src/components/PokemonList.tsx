@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { usePokemonList } from '../hooks/usePokemonList';
 import { PokemonCard } from './PokemonCard';
 import { CardGrid } from './common/CardGrid';
-import { IPokemonListItem } from '../types/pokemon';
 import { PokemonDetailsPanel } from './PokemonDetailsPanel';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const PokemonList: React.FC = () => {
-  const { pokemons, loadMore, loading } = usePokemonList();
+  const { pokemons, loadMore, loading, searchPokemons, resetSearch } = usePokemonList();
+
   const [search, setSearch] = useState('');
   const [selectedPokemon, setSelectedPokemon] = useState<string | null>(null);
   const [shouldFocusNextCard, setShouldFocusNextCard] = useState(false);
@@ -15,10 +15,19 @@ export const PokemonList: React.FC = () => {
   const lastCountRef = useRef<number>(0);
   const newItemRef = useRef<HTMLDivElement | null>(null);
 
-  // TODO: Pass filter to API
-  const filteredPokemons: IPokemonListItem[] = pokemons.filter((pokemon) =>
-    pokemon.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const handleSearch = () => {
+    if (!search || search.trim() === '') {
+      resetSearch();
+    } else {
+      searchPokemons(search);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
   const handleCardClick = (name: string) => {
     setSelectedPokemon((prev) => (prev === name ? null : name));
@@ -28,8 +37,7 @@ export const PokemonList: React.FC = () => {
     const active = document.activeElement;
     const isLoadMoreClick = active?.getAttribute('aria-label') === 'Load more items';
 
-    lastCountRef.current = filteredPokemons.length;
-
+    lastCountRef.current = pokemons.length;
     setShouldFocusNextCard(isLoadMoreClick);
     loadMore();
   };
@@ -55,7 +63,7 @@ export const PokemonList: React.FC = () => {
       >
         {/* TODO: MAKE REUSABLE SEARCH INPUT */}
         {/* Search input */}
-        <div className="shrink-0 mb-4">
+        <div className="shrink-0 mb-4 flex gap-2">
           <label htmlFor="search" className="sr-only">
             Search for a Pokémon
           </label>
@@ -66,7 +74,16 @@ export const PokemonList: React.FC = () => {
             className="w-full px-3 py-2 border rounded-xl"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
+            onKeyDown={handleKeyDown}
           />
+          {/* TODO: MAKE REUSABLE BUTTON */}
+          <button
+            onClick={handleSearch}
+            className="btn-primary shrink-0 px-4 py-2 rounded-xl"
+            aria-label="Search Pokémon"
+          >
+            Search
+          </button>
         </div>
 
         {/* Accessibility announcement */}
@@ -79,12 +96,12 @@ export const PokemonList: React.FC = () => {
         {/* Cards grid container */}
         <div className="flex-1 overflow-hidden">
           <CardGrid
-            items={filteredPokemons}
+            items={pokemons}
             isLoading={loading}
             onLoadMore={handleLoadMore}
             renderItem={(pokemon, index) => {
               const isFirstNew =
-                index === lastCountRef.current && index >= 0 && index < filteredPokemons.length;
+                index === lastCountRef.current && index >= 0 && index < pokemons.length;
 
               return (
                 <PokemonCard

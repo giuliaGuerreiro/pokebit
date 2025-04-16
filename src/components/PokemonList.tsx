@@ -4,14 +4,14 @@ import { PokemonCard } from './PokemonCard';
 import { CardGrid } from './common/CardGrid';
 import { PokemonDetailsPanel } from './PokemonDetailsPanel';
 import { motion, AnimatePresence } from 'framer-motion';
+import SearchInput from './common/SearchInput';
 
 export const PokemonList: React.FC = () => {
-  const { pokemons, loadMore, loading, searchPokemons, resetSearch } = usePokemonList();
-
+  const { pokemons, loadMore, loading, searchPokemons, resetSearch, isSearching } =
+    usePokemonList();
   const [search, setSearch] = useState('');
   const [selectedPokemon, setSelectedPokemon] = useState<string | null>(null);
   const [shouldFocusNextCard, setShouldFocusNextCard] = useState(false);
-
   const lastCountRef = useRef<number>(0);
   const newItemRef = useRef<HTMLDivElement | null>(null);
 
@@ -26,6 +26,13 @@ export const PokemonList: React.FC = () => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleSearch();
+    }
+  };
+
+  const handleClearSearch = () => {
+    setSearch('');
+    if (search && isSearching) {
+      resetSearch();
     }
   };
 
@@ -61,20 +68,16 @@ export const PokemonList: React.FC = () => {
         }}
         transition={{ duration: 0.4, ease: 'easeInOut' }}
       >
-        {/* TODO: MAKE REUSABLE SEARCH INPUT */}
-        {/* Search input */}
-        <div className="shrink-0 mb-4 flex gap-2">
-          <label htmlFor="search" className="sr-only">
-            Search for a Pokémon
-          </label>
-          <input
+        {/* Search input area */}
+        <div className="shrink-0 mb-4 p-1 flex gap-2">
+          <SearchInput
             id="search"
-            type="search"
             placeholder="Search Pokémon"
-            className="w-full px-3 py-2 border rounded-xl"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
+            onClearInput={handleClearSearch}
             onKeyDown={handleKeyDown}
+            label="Search for a Pokémon"
           />
           {/* TODO: MAKE REUSABLE BUTTON */}
           <button
@@ -102,7 +105,6 @@ export const PokemonList: React.FC = () => {
             renderItem={(pokemon, index) => {
               const isFirstNew =
                 index === lastCountRef.current && index >= 0 && index < pokemons.length;
-
               return (
                 <PokemonCard
                   name={pokemon.name}

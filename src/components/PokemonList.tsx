@@ -76,6 +76,7 @@ export const PokemonList: React.FC = () => {
             onChange={(event) => setSearch(event.target.value)}
             onClearInput={handleClearSearch}
             onSearch={handleSearch}
+            isHistoryEnabled
             historyKey="pokemon-search-history"
             onSelectHistory={handleSelectHistory}
           />

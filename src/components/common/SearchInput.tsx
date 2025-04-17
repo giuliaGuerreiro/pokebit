@@ -9,6 +9,7 @@ interface SearchInputProps {
   onSearch: () => void;
   id?: string;
   placeholder?: string;
+  isHistoryEnabled?: boolean;
   historyKey?: string;
   onSelectHistory?: (value: string) => void;
 }
@@ -20,48 +21,23 @@ const SearchInput: React.FC<SearchInputProps> = ({
   onSearch,
   id = 'search',
   placeholder = 'Search',
+  isHistoryEnabled = false,
   historyKey = 'search-history',
   onSelectHistory,
 }) => {
   const [showHistory, setShowHistory] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
-
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const history = localStorage.getItem(historyKey);
-    if (history) {
-      setSearchHistory(JSON.parse(history));
-    }
-  }, [historyKey]);
-
   const saveToHistory = (searchTerm: string) => {
-    if (!searchTerm.trim()) return;
+    if (!isHistoryEnabled || !searchTerm.trim()) return;
 
     const updatedHistory = [searchTerm, ...searchHistory.filter((item) => item !== searchTerm)];
 
     setSearchHistory(updatedHistory);
     localStorage.setItem(historyKey, JSON.stringify(updatedHistory));
   };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node) &&
-        inputRef.current &&
-        !inputRef.current.contains(event.target as Node)
-      ) {
-        setShowHistory(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   const handleClear = () => {
     onClearInput();
@@ -71,7 +47,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
   };
 
   const handleShowHistory = () => {
-    if (searchHistory.length > 0 && onSelectHistory) {
+    if (isHistoryEnabled && searchHistory.length > 0) {
       setShowHistory(true);
     }
   };
@@ -98,27 +74,52 @@ const SearchInput: React.FC<SearchInputProps> = ({
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && value.trim()) {
-      if (onSelectHistory) {
+      if (isHistoryEnabled) {
         saveToHistory(value);
         setShowHistory(false);
       }
 
-      if (onSearch) {
-        onSearch();
-      }
+      onSearch();
     }
   };
 
   const handleSearchClick = () => {
-    if (value.trim() && onSelectHistory) {
+    if (value.trim() && isHistoryEnabled) {
       saveToHistory(value);
+      setShowHistory(false);
     }
 
-    setShowHistory(false);
-    if (onSearch) {
-      onSearch();
-    }
+    onSearch();
   };
+
+  useEffect(() => {
+    if (isHistoryEnabled) {
+      const history = localStorage.getItem(historyKey);
+      if (history) {
+        setSearchHistory(JSON.parse(history));
+      }
+    }
+  }, [historyKey, isHistoryEnabled]);
+
+  useEffect(() => {
+    if (!isHistoryEnabled) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node)
+      ) {
+        setShowHistory(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isHistoryEnabled]);
 
   return (
     <div>
@@ -137,8 +138,8 @@ const SearchInput: React.FC<SearchInputProps> = ({
             value={value}
             onChange={onChange}
             onKeyDown={handleKeyDown}
-            onFocus={handleShowHistory}
-            onClick={handleShowHistory}
+            onFocus={isHistoryEnabled ? handleShowHistory : undefined}
+            onClick={isHistoryEnabled ? handleShowHistory : undefined}
             autoComplete="off"
           />
           {value && (
@@ -158,7 +159,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
       </div>
 
       {/* History Dropdown */}
-      {showHistory && searchHistory.length > 0 && (
+      {isHistoryEnabled && showHistory && searchHistory.length > 0 && (
         <div
           ref={dropdownRef}
           className="absolute z-10 w-[400px] bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto"

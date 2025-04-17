@@ -6,10 +6,20 @@ import { PokemonDetailsPanel } from './PokemonDetailsPanel';
 import { motion, AnimatePresence } from 'framer-motion';
 import SearchInput from './common/SearchInput';
 import { getPokemonImageUrl } from '../utils/image';
+import { FiAlertTriangle } from 'react-icons/fi';
+import Button from './common/Button';
 
 export const PokemonList: React.FC = () => {
-  const { pokemons, loadMore, loading, searchPokemons, resetSearch, isSearching, isFirstLoad } =
-    usePokemonList();
+  const {
+    pokemons,
+    loadMore,
+    loading,
+    searchPokemons,
+    resetSearch,
+    isSearching,
+    isFirstLoad,
+    error,
+  } = usePokemonList();
   const [search, setSearch] = useState('');
   const [selectedPokemon, setSelectedPokemon] = useState<string | null>(null);
   const [shouldFocusNextCard, setShouldFocusNextCard] = useState(false);
@@ -83,30 +93,46 @@ export const PokemonList: React.FC = () => {
           />
         </div>
 
-        {/* TODO: Add option to try fetching again when error */}
         {/* TODO: Add url within .env */}
         {/* Cards grid container */}
         <div className="flex-1 overflow-hidden">
-          <CardGrid
-            items={pokemons}
-            isLoadingMore={loading}
-            isFirstLoad={isFirstLoad}
-            onLoadMore={handleLoadMore}
-            isDetailPanelOpen={selectedPokemon !== null}
-            renderItem={(pokemon, index) => {
-              const isFirstNew =
-                index === lastCountRef.current && index >= 0 && index < pokemons.length;
-              return (
-                <PokemonCard
-                  name={pokemon.name}
-                  imageUrl={getPokemonImageUrl(pokemon.url)}
-                  isSelected={selectedPokemon === pokemon.name}
-                  onClick={() => handleCardClick(pokemon.name)}
-                  cardRef={isFirstNew ? newItemRef : undefined}
-                />
-              );
-            }}
-          />
+          {error ? (
+            <div className="flex flex-col items-center justify-center h-full text-center">
+              <FiAlertTriangle size={150} className="text-red-500 mb-4" />
+              <p className="mb-2">Oops! Failed to load Pokémons.</p>
+              <Button onClick={resetSearch}>Try Again</Button>
+            </div>
+          ) : pokemons.length === 0 && !loading ? (
+            <div className="flex flex-col items-center justify-center h-full text-center">
+              <img
+                src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png"
+                alt="No Pokémon found"
+                className="w-48 h-48 mb-4"
+              />
+              <p>No Pokémon found matching your search.</p>
+            </div>
+          ) : (
+            <CardGrid
+              items={pokemons}
+              isLoadingMore={loading}
+              isFirstLoad={isFirstLoad}
+              onLoadMore={handleLoadMore}
+              isDetailPanelOpen={selectedPokemon !== null}
+              renderItem={(pokemon, index) => {
+                const isFirstNew =
+                  index === lastCountRef.current && index >= 0 && index < pokemons.length;
+                return (
+                  <PokemonCard
+                    name={pokemon.name}
+                    imageUrl={getPokemonImageUrl(pokemon.url)}
+                    isSelected={selectedPokemon === pokemon.name}
+                    onClick={() => handleCardClick(pokemon.name)}
+                    cardRef={isFirstNew ? newItemRef : undefined}
+                  />
+                );
+              }}
+            />
+          )}
         </div>
       </motion.div>
 

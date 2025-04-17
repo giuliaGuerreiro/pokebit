@@ -10,7 +10,6 @@ type CardGridProps<T> = {
   isDetailPanelOpen?: boolean;
 };
 
-// TODO: Disable load more when all data loaded
 export function CardGrid<T extends { id?: string | number }>({
   items,
   renderItem,
@@ -59,7 +58,7 @@ export function CardGrid<T extends { id?: string | number }>({
       )}
 
       {onLoadMore && items.length > 0 && (
-        <div className="shrink-0 py-2">
+        <div className="shrink-0  ">
           <Button
             onClick={onLoadMore}
             variant="primary"

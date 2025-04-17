@@ -8,8 +8,6 @@ interface IPokemonCardProps {
   cardRef?: React.RefObject<HTMLDivElement | null>;
 }
 
-// TODO: Add animation?
-
 export const PokemonCard: React.FC<IPokemonCardProps> = ({
   name,
   imageUrl,
@@ -33,7 +31,12 @@ export const PokemonCard: React.FC<IPokemonCardProps> = ({
       data-testid="pokemon-card"
     >
       <img src={imageUrl} alt={name} className="w-32 h-32 mx-auto" />
-      <h3 className="heading-3">{name}</h3>
+      <h3
+        className="heading-3 text-center text-sm truncate w-full max-w-full break-words"
+        title={name}
+      >
+        {name}
+      </h3>
     </div>
   );
 };

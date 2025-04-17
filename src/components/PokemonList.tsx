@@ -8,7 +8,7 @@ import SearchInput from './common/SearchInput';
 import { getPokemonImageUrl } from '../utils/image';
 
 export const PokemonList: React.FC = () => {
-  const { pokemons, loadMore, loading, searchPokemons, resetSearch, isSearching } =
+  const { pokemons, loadMore, loading, searchPokemons, resetSearch, isSearching, isFirstLoad } =
     usePokemonList();
   const [search, setSearch] = useState('');
   const [selectedPokemon, setSelectedPokemon] = useState<string | null>(null);
@@ -89,7 +89,8 @@ export const PokemonList: React.FC = () => {
         <div className="flex-1 overflow-hidden">
           <CardGrid
             items={pokemons}
-            isLoading={loading}
+            isLoadingMore={loading}
+            isFirstLoad={isFirstLoad}
             onLoadMore={handleLoadMore}
             isDetailPanelOpen={selectedPokemon !== null}
             renderItem={(pokemon, index) => {

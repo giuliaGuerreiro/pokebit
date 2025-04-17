@@ -27,14 +27,17 @@ const SearchInput: React.FC<SearchInputProps> = ({
 }) => {
   const [showHistory, setShowHistory] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const [filteredHistory, setFilteredHistory] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const saveToHistory = (searchTerm: string) => {
     if (!isHistoryEnabled || !searchTerm.trim()) return;
 
-    const updatedHistory = [searchTerm, ...searchHistory.filter((item) => item !== searchTerm)];
-
+    const updatedHistory = [
+      searchTerm,
+      ...searchHistory.filter((item) => item !== searchTerm),
+    ].slice(0, 10);
     setSearchHistory(updatedHistory);
     localStorage.setItem(historyKey, JSON.stringify(updatedHistory));
   };
@@ -63,13 +66,22 @@ const SearchInput: React.FC<SearchInputProps> = ({
     event.stopPropagation();
 
     const updatedHistory = searchHistory.filter((storedItem) => storedItem !== item);
+
     setSearchHistory(updatedHistory);
+    setFilteredHistory(filterHistoryItems(updatedHistory, value));
+
     localStorage.setItem(historyKey, JSON.stringify(updatedHistory));
+
+    if (updatedHistory.length === 0) {
+      setShowHistory(false);
+    }
   };
 
   const clearAllHistory = () => {
     setSearchHistory([]);
+    setFilteredHistory([]);
     localStorage.removeItem(historyKey);
+    setShowHistory(false);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -88,18 +100,44 @@ const SearchInput: React.FC<SearchInputProps> = ({
       saveToHistory(value);
       setShowHistory(false);
     }
-
     onSearch();
+  };
+
+  const filterHistoryItems = (history: string[], searchText: string): string[] => {
+    if (!searchText.trim()) {
+      return history;
+    }
+
+    return history.filter((item) => item.toLowerCase().includes(searchText.toLowerCase()));
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(event);
+
+    if (isHistoryEnabled) {
+      const historyFiltered = filterHistoryItems(searchHistory, event.target.value);
+      setFilteredHistory(historyFiltered);
+
+      if (historyFiltered.length === 0 && showHistory) {
+        setShowHistory(false);
+      } else if (historyFiltered.length > 0 && !showHistory) {
+        setShowHistory(true);
+      }
+    }
   };
 
   useEffect(() => {
     if (isHistoryEnabled) {
       const history = localStorage.getItem(historyKey);
+
       if (history) {
-        setSearchHistory(JSON.parse(history));
+        const parsedHistory = JSON.parse(history);
+        const limitedHistory = parsedHistory.slice(0, 10);
+        setSearchHistory(limitedHistory);
+        setFilteredHistory(filterHistoryItems(limitedHistory, value));
       }
     }
-  }, [historyKey, isHistoryEnabled]);
+  }, [historyKey, isHistoryEnabled, value]);
 
   useEffect(() => {
     if (!isHistoryEnabled) return;
@@ -136,7 +174,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
             placeholder={placeholder}
             className="w-full pl-10 pr-10 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-300"
             value={value}
-            onChange={onChange}
+            onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             onFocus={isHistoryEnabled ? handleShowHistory : undefined}
             onClick={isHistoryEnabled ? handleShowHistory : undefined}
@@ -159,7 +197,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
       </div>
 
       {/* History Dropdown */}
-      {isHistoryEnabled && showHistory && searchHistory.length > 0 && (
+      {isHistoryEnabled && showHistory && filteredHistory.length > 0 && (
         <div
           ref={dropdownRef}
           className="absolute z-10 w-[400px] bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto"
@@ -173,7 +211,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
 
           {/* TODO: make reusable list */}
           <ul className="py-1">
-            {searchHistory.map((item, index) => (
+            {filteredHistory.map((item, index) => (
               <li
                 key={index}
                 onClick={() => handleSelectHistoryItem(item)}

@@ -6,6 +6,8 @@ import { extractSpriteUrls } from '../utils/image';
 import { BiSolidLeftArrow, BiSolidRightArrow } from 'react-icons/bi';
 import Button from './common/Button';
 import LoadingSpinner from './common/LoadingSpinner';
+import toast, { Toaster } from 'react-hot-toast';
+import { FiAlertCircle } from 'react-icons/fi';
 
 interface IPokemonStatsProps {
   name: string;
@@ -44,6 +46,20 @@ export const PokemonStats: React.FC<IPokemonStatsProps> = ({ name }) => {
     }
   }, [name]);
 
+  useEffect(() => {
+    if (error) {
+      toast(
+        <div className="flex items-center gap-2">
+          <FiAlertCircle className="text-red-500" size={20} />
+          <span>{error}</span>
+        </div>,
+        {
+          position: 'bottom-right',
+        }
+      );
+    }
+  }, [error]);
+
   if (isLoading) {
     return (
       <div className="flex flex-col justify-center items-center h-full">
@@ -71,6 +87,8 @@ export const PokemonStats: React.FC<IPokemonStatsProps> = ({ name }) => {
 
   return (
     <div className="flex flex-col">
+      <Toaster />
+
       {/* Pokemon Image and Info */}
       <section className="relative mb-6">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-300  opacity-30 rounded-lg"></div>

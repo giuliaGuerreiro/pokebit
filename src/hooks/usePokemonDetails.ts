@@ -3,32 +3,29 @@ import { fetchPokemonDetails } from '../api/pokemon';
 import { Pokemon } from 'pokenode-ts';
 
 export const usePokemonDetails = (name: string) => {
-  const [data, setData] = useState<Pokemon | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [pokemonDetails, setPokemonDetails] = useState<Pokemon | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    let isMounted = true;
-
-    const fetch = async () => {
-      setLoading(true);
+    const getPokemonDetailsByName = async () => {
+      setIsLoading(true);
       setError(null);
+
       try {
         const result = await fetchPokemonDetails(name);
-        if (isMounted) setData(result);
+        console.log('result', result);
+
+        setPokemonDetails(result);
       } catch (err) {
-        if (isMounted) setError('Failed to load Pokémon details');
+        setError('Failed to load Pokémon details');
       } finally {
-        if (isMounted) setLoading(false);
+        setIsLoading(false);
       }
     };
 
-    fetch();
-
-    return () => {
-      isMounted = false;
-    };
+    getPokemonDetailsByName();
   }, [name]);
 
-  return { data, loading, error };
+  return { pokemonDetails, isLoading, error };
 };

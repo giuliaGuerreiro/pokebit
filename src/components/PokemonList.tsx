@@ -8,6 +8,8 @@ import SearchInput from './common/SearchInput';
 import { getPokemonImageUrl } from '../utils/image';
 import { FiAlertTriangle } from 'react-icons/fi';
 import Button from './common/Button';
+import toast, { Toaster } from 'react-hot-toast';
+import { FiAlertCircle } from 'react-icons/fi';
 
 export const PokemonList: React.FC = () => {
   const {
@@ -67,8 +69,24 @@ export const PokemonList: React.FC = () => {
     }
   }, [loading, shouldFocusNextCard]);
 
+  useEffect(() => {
+    if (error) {
+      toast(
+        <div className="flex items-center gap-2">
+          <FiAlertCircle className="text-red-500" size={20} />
+          <span>{error}</span>
+        </div>,
+        {
+          position: 'bottom-right',
+        }
+      );
+    }
+  }, [error]);
+
   return (
     <div className="flex h-full pt-4 overflow-hidden gap-4">
+      <Toaster />
+
       {/* Main content - shrinks when details panel is open */}
       <motion.div
         className="flex flex-col overflow-hidden"

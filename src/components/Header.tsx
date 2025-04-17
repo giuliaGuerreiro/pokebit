@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import React, { useState } from 'react';
 import { FiMenu, FiX } from 'react-icons/fi';
+import pokebitLogo from '../assets/pokebit_logo.png';
 
 const navLinks = [
   { name: 'Pokémons', path: '/' },
@@ -24,7 +25,7 @@ const Header: React.FC = () => {
           className="font-retro text-sm sm:text-base tracking-widest focus-visible:outline focus-visible:outline-2"
           aria-label="PokéBit homepage"
         >
-          PokéBit
+          <img src={pokebitLogo} className="w-46 h-12" />
         </Link>
 
         {/* Desktop navigation */}

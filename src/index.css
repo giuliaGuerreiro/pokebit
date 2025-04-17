@@ -58,6 +58,10 @@ img {
     @apply bg-gray-600 text-white font-medium py-2 px-4 rounded hover:bg-gray-700 transition-colors;
   }
 
+  .btn-tertiary {
+    @apply bg-red-500 text-white font-medium py-2 px-4 rounded hover:bg-red-700 transition-colors;
+  }
+
   .btn-outline {
     @apply border border-pokebit-red text-pokebit-red hover:bg-pokebit-red hover:text-white;
   }

@@ -1,7 +1,7 @@
 import React, { ButtonHTMLAttributes, ReactNode } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'transparent' | 'gray-fill';
+export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'transparent' | 'gray-fill';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -11,6 +11,7 @@ interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;
   width?: string;
   isLoading?: boolean;
+  isDisabled?: boolean;
   leftIcon?: ReactNode;
   isCentralized?: boolean;
   className?: string;
@@ -23,6 +24,7 @@ const Button: React.FC<IButtonProps> = ({
   size = 'md',
   width,
   isLoading = false,
+  isDisabled = false,
   leftIcon,
   isCentralized = false,
   className,
@@ -40,6 +42,8 @@ const Button: React.FC<IButtonProps> = ({
       'btn-primary mt-2 mb-2 flex items-center justify-center gap-2 px-4 py-2 rounded focus-visible:outline focus-visible:outline-2 disabled:bg-gray-300',
     secondary:
       'btn-secondary mt-2 mb-2 flex items-center justify-center gap-2 px-4 py-2 rounded focus-visible:outline focus-visible:outline-2 disabled:bg-gray-300',
+    tertiary:
+      'btn-tertiary mt-2 mb-2 flex items-center justify-center gap-2 px-4 py-2 rounded focus-visible:outline focus-visible:outline-2 disabled:bg-gray-300',
     transparent: 'text-gray-400 hover:text-gray-600 focus:outline-none',
     ['gray-fill']: 'p-1 rounded-full bg-gray-200 hover:bg-gray-300 shadow',
   };
@@ -49,7 +53,7 @@ const Button: React.FC<IButtonProps> = ({
   return (
     <button
       className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
-      disabled={isLoading}
+      disabled={isDisabled || isLoading}
       onClick={onClick}
     >
       {isLoading && <LoadingSpinner size={spinnerSize} color="current" />}

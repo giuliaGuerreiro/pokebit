@@ -1,26 +1,67 @@
-import React, { useRef } from 'react';
-import { FiX, FiSearch } from 'react-icons/fi';
+import React, { useState, useRef, useEffect } from 'react';
+import { FiX, FiSearch, FiClock, FiTrash2 } from 'react-icons/fi';
+import Button from './Button';
 
-interface ISearchInputProps {
-  id?: string;
-  placeholder?: string;
+interface SearchInputProps {
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onClearInput: () => void;
-  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-  label?: string;
+  onSearch: () => void;
+  id?: string;
+  placeholder?: string;
+  historyKey?: string;
+  onSelectHistory?: (value: string) => void;
 }
 
-const SearchInput: React.FC<ISearchInputProps> = ({
-  id = 'search',
-  placeholder = 'Search',
+const SearchInput: React.FC<SearchInputProps> = ({
   value,
   onChange,
   onClearInput,
-  onKeyDown,
-  label = 'Search',
+  onSearch,
+  id = 'search',
+  placeholder = 'Search',
+  historyKey = 'search-history',
+  onSelectHistory,
 }) => {
+  const [showHistory, setShowHistory] = useState(false);
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
+
   const inputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const history = localStorage.getItem(historyKey);
+    if (history) {
+      setSearchHistory(JSON.parse(history));
+    }
+  }, [historyKey]);
+
+  const saveToHistory = (searchTerm: string) => {
+    if (!searchTerm.trim()) return;
+
+    const updatedHistory = [searchTerm, ...searchHistory.filter((item) => item !== searchTerm)];
+
+    setSearchHistory(updatedHistory);
+    localStorage.setItem(historyKey, JSON.stringify(updatedHistory));
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node)
+      ) {
+        setShowHistory(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleClear = () => {
     onClearInput();
@@ -29,39 +70,128 @@ const SearchInput: React.FC<ISearchInputProps> = ({
     }
   };
 
+  const handleInputFocus = () => {
+    if (onSelectHistory) {
+      setShowHistory(true);
+    }
+  };
+
+  const handleSelectHistoryItem = (item: string) => {
+    if (onSelectHistory) {
+      onSelectHistory(item);
+      setShowHistory(false);
+    }
+  };
+
+  const handleRemoveHistoryItem = (event: React.MouseEvent, item: string) => {
+    event.stopPropagation();
+
+    const updatedHistory = searchHistory.filter((storedItem) => storedItem !== item);
+    setSearchHistory(updatedHistory);
+    localStorage.setItem(historyKey, JSON.stringify(updatedHistory));
+  };
+
+  const clearAllHistory = () => {
+    setSearchHistory([]);
+    localStorage.removeItem(historyKey);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && value.trim()) {
+      if (onSelectHistory) {
+        saveToHistory(value);
+        setShowHistory(false);
+      }
+
+      if (onSearch) {
+        onSearch();
+      }
+    }
+  };
+
+  const handleSearchClick = () => {
+    if (value.trim() && onSelectHistory) {
+      saveToHistory(value);
+    }
+
+    setShowHistory(false);
+    if (onSearch) {
+      onSearch();
+    }
+  };
+
   return (
-    <div className="relative w-[400px]">
-      {label && (
-        <label htmlFor={id} className="sr-only">
-          {label}
-        </label>
-      )}
-      <div className="relative flex items-center">
-        <div className="absolute left-3 text-gray-400">
-          <FiSearch size={18} />
+    <div>
+      {/* Input */}
+      <div className="flex items-center gap-2">
+        <div className="relative flex items-center w-[400px]">
+          <div className="absolute left-3 text-gray-400">
+            <FiSearch size={18} />
+          </div>
+          <input
+            ref={inputRef}
+            id={id}
+            type="text"
+            placeholder={placeholder}
+            className="w-full pl-10 pr-10 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-300"
+            value={value}
+            onChange={onChange}
+            onKeyDown={handleKeyDown}
+            onFocus={handleInputFocus}
+            autoComplete="off"
+          />
+          {value && (
+            <Button
+              onClick={handleClear}
+              variant="transparent"
+              size="sm"
+              leftIcon={<FiX size={18} />}
+              className="absolute right-1"
+            />
+          )}
         </div>
-        <input
-          ref={inputRef}
-          id={id}
-          type="text"
-          placeholder={placeholder}
-          className="w-full pl-10 pr-10 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-300"
-          value={value}
-          onChange={onChange}
-          onKeyDown={onKeyDown}
-          autoComplete="off"
-        />
-        {value && (
-          <button
-            type="button"
-            onClick={handleClear}
-            className="absolute right-3 text-gray-400 hover:text-gray-600 focus:outline-none"
-            aria-label="Clear search"
-          >
-            <FiX size={18} />
-          </button>
-        )}
+
+        <Button onClick={handleSearchClick} variant="secondary" aria-label="Search">
+          Search
+        </Button>
       </div>
+
+      {/* History Dropdown */}
+      {showHistory && searchHistory.length > 0 && (
+        <div
+          ref={dropdownRef}
+          className="absolute z-10 w-[400px] bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+        >
+          <div className="flex justify-between items-center px-3 py-2 border-b border-gray-100">
+            <span className="text-sm font-medium text-gray-500">Recent searches</span>
+            <Button onClick={clearAllHistory} variant="transparent" size="sm">
+              Clean history
+            </Button>
+          </div>
+
+          {/* TODO: make reusable list */}
+          <ul className="py-1">
+            {searchHistory.map((item, index) => (
+              <li
+                key={index}
+                onClick={() => handleSelectHistoryItem(item)}
+                className="px-3 py-2 hover:bg-gray-100 cursor-pointer flex justify-between items-center group"
+              >
+                <div className="flex items-center space-x-2">
+                  <FiClock className="text-gray-400" size={14} />
+                  <span>{item}</span>
+                </div>
+                <Button
+                  onClick={(event) => handleRemoveHistoryItem(event, item)}
+                  variant="transparent"
+                  size="sm"
+                  leftIcon={<FiTrash2 size={14} />}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

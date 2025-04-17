@@ -70,8 +70,8 @@ const SearchInput: React.FC<SearchInputProps> = ({
     }
   };
 
-  const handleInputFocus = () => {
-    if (onSelectHistory) {
+  const handleShowHistory = () => {
+    if (searchHistory.length > 0 && onSelectHistory) {
       setShowHistory(true);
     }
   };
@@ -137,7 +137,8 @@ const SearchInput: React.FC<SearchInputProps> = ({
             value={value}
             onChange={onChange}
             onKeyDown={handleKeyDown}
-            onFocus={handleInputFocus}
+            onFocus={handleShowHistory}
+            onClick={handleShowHistory}
             autoComplete="off"
           />
           {value && (

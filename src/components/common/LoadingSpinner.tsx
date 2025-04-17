@@ -1,11 +1,18 @@
 import React from 'react';
 
-interface LoadingSpinnerProps {
+type SpinnerVariant = 'page' | 'component';
+
+interface ILoadingSpinnerProps {
   size?: 'xs' | 'sm' | 'md' | 'lg';
   color?: string;
+  variant?: SpinnerVariant;
 }
 
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ size = 'md', color = 'current' }) => {
+const LoadingSpinner: React.FC<ILoadingSpinnerProps> = ({
+  size = 'md',
+  color = 'current',
+  variant = 'component',
+}) => {
   const sizeMap = {
     xs: 'w-3 h-3',
     sm: 'w-4 h-4',
@@ -15,9 +22,13 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ size = 'md', color = 'c
 
   const colorClass = color === 'current' ? 'border-current' : `border-${color}`;
 
+  const variantClass =
+    variant === 'page'
+      ? 'h-12 w-12 border-t-4 border-b-4 border-pokebit-yellow'
+      : `inline-block border ${sizeMap[size]} ${colorClass} border-t-transparent`;
   return (
     <span
-      className={`inline-block rounded-full animate-spin border ${sizeMap[size]} ${colorClass} border-t-transparent`}
+      className={` rounded-full animate-spin ${variantClass}`}
       aria-hidden="true"
       role="status"
     />

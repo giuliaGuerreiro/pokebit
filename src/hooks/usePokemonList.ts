@@ -7,6 +7,7 @@ export const usePokemonList = (limit = 20) => {
   const [pokemons, setPokemons] = useState<IPokemonListItem[]>([]);
   const [offset, setOffset] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearching, setIsSearching] = useState(false);
 
@@ -47,6 +48,7 @@ export const usePokemonList = (limit = 20) => {
       console.error('Error fetching Pokémon:', error);
     } finally {
       setLoading(false);
+      setIsFirstLoad(false);
     }
   };
 
@@ -97,5 +99,6 @@ export const usePokemonList = (limit = 20) => {
     resetSearch,
     searchTerm,
     isSearching,
+    isFirstLoad,
   };
 };

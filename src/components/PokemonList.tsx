@@ -5,6 +5,7 @@ import { CardGrid } from './common/CardGrid';
 import { PokemonDetailsPanel } from './PokemonDetailsPanel';
 import { motion, AnimatePresence } from 'framer-motion';
 import SearchInput from './common/SearchInput';
+import { getPokemonImageUrl } from '../utils/image';
 
 export const PokemonList: React.FC = () => {
   const { pokemons, loadMore, loading, searchPokemons, resetSearch, isSearching } =
@@ -96,7 +97,7 @@ export const PokemonList: React.FC = () => {
               return (
                 <PokemonCard
                   name={pokemon.name}
-                  imageUrl={`https://img.pokemondb.net/sprites/home/normal/${pokemon.name}.png`}
+                  imageUrl={getPokemonImageUrl(pokemon.url)}
                   isSelected={selectedPokemon === pokemon.name}
                   onClick={() => handleCardClick(pokemon.name)}
                   cardRef={isFirstNew ? newItemRef : undefined}

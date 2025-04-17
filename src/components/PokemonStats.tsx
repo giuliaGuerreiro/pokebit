@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { usePokemonDetails } from '../hooks/usePokemonDetails';
 import { PokemonStat, PokemonType, TYPE_COLORS } from '../types/pokemonDetails';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { extractSpriteUrls } from '../utils/image';
 import { BiSolidLeftArrow, BiSolidRightArrow } from 'react-icons/bi';
 import Button from './common/Button';
@@ -23,6 +23,25 @@ const STAT_NAMES: Record<PokemonStat, string> = {
 export const PokemonStats: React.FC<IPokemonStatsProps> = ({ name }) => {
   const { pokemonDetails, isLoading, error } = usePokemonDetails(name);
   const [currentSpriteIndex, setCurrentSpriteIndex] = useState(0);
+  const [currentName, setCurrentName] = useState(name);
+
+  const spriteUrls = pokemonDetails ? extractSpriteUrls(pokemonDetails.sprites) : [];
+
+  const heightInMeters = pokemonDetails ? pokemonDetails.height / 10 : 0;
+  const weightInKg = pokemonDetails ? pokemonDetails.weight / 10 : 0;
+  const maxStat = pokemonDetails
+    ? Math.max(...pokemonDetails.stats.map((stat) => stat.base_stat))
+    : 0;
+
+  useEffect(() => {
+    if (name === currentName) return;
+
+    setCurrentName(name);
+
+    if (spriteUrls.length > 0) {
+      setCurrentSpriteIndex(0);
+    }
+  }, [name]);
 
   if (isLoading) {
     return (
@@ -47,12 +66,6 @@ export const PokemonStats: React.FC<IPokemonStatsProps> = ({ name }) => {
       </div>
     );
   }
-
-  const spriteUrls = extractSpriteUrls(pokemonDetails.sprites);
-
-  const heightInMeters = pokemonDetails.height / 10;
-  const weightInKg = pokemonDetails.weight / 10;
-  const maxStat = Math.max(...pokemonDetails.stats.map((stat) => stat.base_stat));
 
   return (
     <div className="flex flex-col">

@@ -17,9 +17,9 @@ const STAT_NAMES: Record<PokemonStat, string> = {
 };
 
 export const PokemonStats: React.FC<IPokemonStatsProps> = ({ name }) => {
-  const { data, loading, error } = usePokemonDetails(name);
+  const { pokemonDetails, isLoading, error } = usePokemonDetails(name);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pokebit-yellow"></div>
@@ -35,7 +35,7 @@ export const PokemonStats: React.FC<IPokemonStatsProps> = ({ name }) => {
     );
   }
 
-  if (!data) {
+  if (!pokemonDetails) {
     return (
       <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded">
         <p className="text-yellow-700">No details found for {name}</p>
@@ -44,10 +44,11 @@ export const PokemonStats: React.FC<IPokemonStatsProps> = ({ name }) => {
   }
 
   const imageUrl =
-    data.sprites.other?.['official-artwork']?.front_default || data.sprites.front_default;
-  const heightInMeters = data.height / 10;
-  const weightInKg = data.weight / 10;
-  const maxStat = Math.max(...data.stats.map((stat) => stat.base_stat));
+    pokemonDetails.sprites.other?.['official-artwork']?.front_default ||
+    pokemonDetails.sprites.front_default;
+  const heightInMeters = pokemonDetails.height / 10;
+  const weightInKg = pokemonDetails.weight / 10;
+  const maxStat = Math.max(...pokemonDetails.stats.map((stat) => stat.base_stat));
 
   return (
     <div className="flex flex-col">
@@ -68,13 +69,15 @@ export const PokemonStats: React.FC<IPokemonStatsProps> = ({ name }) => {
 
         <div className="text-center mt-2">
           <h2 className="font-retro text-2xl mb-2 capitalize">{name}</h2>
-          <span className="text-gray-500 text-sm">#{data.id.toString().padStart(3, '0')}</span>
+          <span className="text-gray-500 text-sm">
+            #{pokemonDetails.id.toString().padStart(3, '0')}
+          </span>
         </div>
       </section>
 
       {/* Type badges */}
       <section className="flex justify-center gap-2 mb-6">
-        {data.types.map((typeInfo) => (
+        {pokemonDetails.types.map((typeInfo) => (
           <span
             key={typeInfo.type.name}
             className={`${TYPE_COLORS[typeInfo.type.name as PokemonType] || 'bg-gray-400'} text-white px-3 py-1 rounded-full text-sm capitalize font-medium`}
@@ -100,7 +103,7 @@ export const PokemonStats: React.FC<IPokemonStatsProps> = ({ name }) => {
       <section className="mb-6">
         <h3 className="font-retro text-lg mb-3">Abilities</h3>
         <div className="flex flex-wrap gap-2">
-          {data.abilities.map((ability) => (
+          {pokemonDetails.abilities.map((ability) => (
             <span
               key={ability.ability.name}
               className="bg-gray-200  px-3 py-1 rounded-lg text-sm capitalize"
@@ -116,7 +119,7 @@ export const PokemonStats: React.FC<IPokemonStatsProps> = ({ name }) => {
       <section>
         <h3 className="font-retro text-lg mb-3">Base Stats</h3>
         <div className="space-y-3">
-          {data.stats.map((stat) => (
+          {pokemonDetails.stats.map((stat) => (
             <div key={stat.stat.name} className="flex items-center">
               <span className="w-24 text-sm font-medium">
                 {STAT_NAMES[stat.stat.name as PokemonStat] || stat.stat.name}

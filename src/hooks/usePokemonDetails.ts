@@ -18,6 +18,7 @@ export const usePokemonDetails = (name: string) => {
 
         setPokemonDetails(result);
       } catch (err) {
+        console.error('Failed to load Pokémon details:', error);
         setError('Failed to load Pokémon details');
       } finally {
         setIsLoading(false);

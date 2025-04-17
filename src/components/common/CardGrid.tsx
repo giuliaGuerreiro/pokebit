@@ -6,12 +6,10 @@ type CardGridProps<T> = {
   renderItem: (item: T, index: number) => React.ReactNode;
   isLoading?: boolean;
   onLoadMore?: () => void;
+  isDetailPanelOpen?: boolean;
 };
 
-// TODO: Define height and add scroll
 // TODO: Add skeleton
-// TODO: Add Loader within Load more button
-
 // TODO: Only show Load button when length > 0
 
 export function CardGrid<T extends { id?: string | number }>({
@@ -19,13 +17,14 @@ export function CardGrid<T extends { id?: string | number }>({
   renderItem,
   isLoading,
   onLoadMore,
+  isDetailPanelOpen = false,
 }: CardGridProps<T>) {
+  const gridColumnsVariant = isDetailPanelOpen
+    ? 'grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4'
+    : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4';
   return (
     <div className="h-full flex flex-col overflow-hidden">
-      <div
-        role="list"
-        className="flex-1 overflow-y-auto pr-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-      >
+      <div role="list" className={`flex-1 overflow-y-auto pr-1 grid ${gridColumnsVariant}`}>
         {items.map((item, index) => (
           <div key={item.id ?? index} role="listitem">
             {renderItem(item, index)}

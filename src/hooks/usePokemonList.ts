@@ -10,6 +10,7 @@ export const usePokemonList = (limit = 20) => {
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const offsetRef = useRef(offset);
   const isSearchingRef = useRef(isSearching);
@@ -29,6 +30,8 @@ export const usePokemonList = (limit = 20) => {
 
   const loadMore = async () => {
     setLoading(true);
+    setError(null);
+
     try {
       const currentOffset = offsetRef.current;
       const currentIsSearching = isSearchingRef.current;
@@ -46,6 +49,7 @@ export const usePokemonList = (limit = 20) => {
     } catch (error) {
       // TODO: Add notification toast
       console.error('Error fetching Pokémon:', error);
+      setError('Error fetching Pokémon');
     } finally {
       setLoading(false);
       setIsFirstLoad(false);
@@ -100,5 +104,6 @@ export const usePokemonList = (limit = 20) => {
     searchTerm,
     isSearching,
     isFirstLoad,
+    error,
   };
 };

@@ -1,6 +1,10 @@
 import { motion } from 'framer-motion';
 import { usePokemonDetails } from '../hooks/usePokemonDetails';
 import { PokemonStat, PokemonType, TYPE_COLORS } from '../types/pokemonDetails';
+import { useState } from 'react';
+import { extractSpriteUrls } from '../utils/image';
+import { BiSolidLeftArrow, BiSolidRightArrow } from 'react-icons/bi';
+import Button from './common/Button';
 
 interface IPokemonStatsProps {
   name: string;
@@ -18,6 +22,7 @@ const STAT_NAMES: Record<PokemonStat, string> = {
 
 export const PokemonStats: React.FC<IPokemonStatsProps> = ({ name }) => {
   const { pokemonDetails, isLoading, error } = usePokemonDetails(name);
+  const [currentSpriteIndex, setCurrentSpriteIndex] = useState(0);
 
   if (isLoading) {
     return (
@@ -43,9 +48,8 @@ export const PokemonStats: React.FC<IPokemonStatsProps> = ({ name }) => {
     );
   }
 
-  const imageUrl =
-    pokemonDetails.sprites.other?.['official-artwork']?.front_default ||
-    pokemonDetails.sprites.front_default;
+  const spriteUrls = extractSpriteUrls(pokemonDetails.sprites);
+
   const heightInMeters = pokemonDetails.height / 10;
   const weightInKg = pokemonDetails.weight / 10;
   const maxStat = Math.max(...pokemonDetails.stats.map((stat) => stat.base_stat));
@@ -56,15 +60,43 @@ export const PokemonStats: React.FC<IPokemonStatsProps> = ({ name }) => {
       <section className="relative mb-6">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-100  opacity-30 rounded-lg"></div>
 
-        {imageUrl && (
-          <motion.img
-            src={imageUrl}
-            alt={name}
-            className="w-48 h-48 mx-auto mb-2"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.3 }}
-          />
+        {spriteUrls.length > 0 && (
+          <div className="relative flex justify-center items-center">
+            <motion.img
+              key={spriteUrls[currentSpriteIndex]}
+              src={spriteUrls[currentSpriteIndex]}
+              alt={`${name} sprite`}
+              className="w-48 h-48 mx-auto mb-2"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            />
+
+            {/* Image Buttons */}
+            {spriteUrls.length > 1 && (
+              <>
+                <Button
+                  onClick={() =>
+                    setCurrentSpriteIndex((prev) => (prev === 0 ? spriteUrls.length - 1 : prev - 1))
+                  }
+                  leftIcon={<BiSolidLeftArrow size={16} />}
+                  className="absolute left-0 ml-2 p-1 bg-gray-200 hover:bg-gray-300 rounded-full"
+                  variant="gray-fill"
+                  size="sm"
+                />
+
+                <Button
+                  onClick={() =>
+                    setCurrentSpriteIndex((prev) => (prev === spriteUrls.length - 1 ? 0 : prev + 1))
+                  }
+                  leftIcon={<BiSolidRightArrow size={16} />}
+                  className="absolute right-0 mr-2 p-1 bg-gray-200 hover:bg-gray-300 rounded-full"
+                  variant="gray-fill"
+                  size="sm"
+                />
+              </>
+            )}
+          </div>
         )}
 
         <div className="text-center mt-2">

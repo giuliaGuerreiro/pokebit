@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { extractSpriteUrls } from '../utils/image';
 import { BiSolidLeftArrow, BiSolidRightArrow } from 'react-icons/bi';
 import Button from './common/Button';
+import LoadingSpinner from './common/LoadingSpinner';
 
 interface IPokemonStatsProps {
   name: string;
@@ -45,8 +46,9 @@ export const PokemonStats: React.FC<IPokemonStatsProps> = ({ name }) => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pokebit-yellow"></div>
+      <div className="flex flex-col justify-center items-center h-full">
+        <LoadingSpinner variant="page" />
+        <h3 className="heading-3 mt-4">{`Loading ${name} Details...`}</h3>
       </div>
     );
   }
@@ -71,7 +73,7 @@ export const PokemonStats: React.FC<IPokemonStatsProps> = ({ name }) => {
     <div className="flex flex-col">
       {/* Pokemon Image and Info */}
       <section className="relative mb-6">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-100  opacity-30 rounded-lg"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-300  opacity-30 rounded-lg"></div>
 
         {spriteUrls.length > 0 && (
           <div className="relative flex justify-center items-center">

@@ -91,6 +91,7 @@ export const PokemonList: React.FC = () => {
             items={pokemons}
             isLoading={loading}
             onLoadMore={handleLoadMore}
+            isDetailPanelOpen={selectedPokemon !== null}
             renderItem={(pokemon, index) => {
               const isFirstNew =
                 index === lastCountRef.current && index >= 0 && index < pokemons.length;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from './Button';
 
 type CardGridProps<T> = {
@@ -18,19 +18,28 @@ export function CardGrid<T extends { id?: string | number }>({
   onLoadMore,
   isDetailPanelOpen = false,
 }: CardGridProps<T>) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
   const gridColumnsVariant = isDetailPanelOpen
     ? 'grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'
     : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4';
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
-      {isFirstLoad ? (
+      {true ? (
         <div
           role="list"
           className={`flex-1 overflow-y-auto pr-1 grid ${gridColumnsVariant} gap-4 auto-rows-max`}
         >
           {/* Skeleton */}
-          {Array(6)
+          {Array(isMobile ? 4 : 8)
             .fill(0)
             .map((_, index) => (
               <div

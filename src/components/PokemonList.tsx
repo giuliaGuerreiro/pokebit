@@ -100,7 +100,9 @@ export const PokemonList: React.FC = () => {
             <div className="flex flex-col items-center justify-center h-full text-center">
               <FiAlertTriangle size={150} className="text-red-500 mb-4" />
               <p className="mb-2">Oops! Failed to load Pokémons.</p>
-              <Button onClick={resetSearch}>Try Again</Button>
+              <Button variant="tertiary" onClick={resetSearch}>
+                Try Again
+              </Button>
             </div>
           ) : pokemons.length === 0 && !loading ? (
             <div className="flex flex-col items-center justify-center h-full text-center">

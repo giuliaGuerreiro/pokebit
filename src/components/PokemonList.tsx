@@ -5,7 +5,6 @@ import { CardGrid } from './common/CardGrid';
 import { PokemonDetailsPanel } from './PokemonDetailsPanel';
 import { motion, AnimatePresence } from 'framer-motion';
 import SearchInput from './common/SearchInput';
-import Button from './common/Button';
 
 export const PokemonList: React.FC = () => {
   const { pokemons, loadMore, loading, searchPokemons, resetSearch, isSearching } =
@@ -24,17 +23,16 @@ export const PokemonList: React.FC = () => {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
-  };
-
   const handleClearSearch = () => {
     setSearch('');
     if (search && isSearching) {
       resetSearch();
     }
+  };
+
+  const handleSelectHistory = (term: string) => {
+    setSearch(term);
+    searchPokemons(term);
   };
 
   const handleCardClick = (name: string) => {
@@ -70,19 +68,17 @@ export const PokemonList: React.FC = () => {
         transition={{ duration: 0.4, ease: 'easeInOut' }}
       >
         {/* Search input area */}
-        <div className="shrink-0 mb-4 p-1 flex items-center gap-2">
+        <div className="shrink-0 mb-4 p-1">
           <SearchInput
-            id="search"
+            id="pokemon-search"
             placeholder="Search Pokémon"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             onClearInput={handleClearSearch}
-            onKeyDown={handleKeyDown}
-            label="Search for a Pokémon"
+            onSearch={handleSearch}
+            historyKey="pokemon-search-history"
+            onSelectHistory={handleSelectHistory}
           />
-          <Button onClick={handleSearch} variant="primary" aria-label="Search Pokémon">
-            Search
-          </Button>
         </div>
 
         {/* TODO: Add option to try fetching again when error */}

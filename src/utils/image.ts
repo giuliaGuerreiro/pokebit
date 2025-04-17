@@ -46,7 +46,14 @@ export const extractSpriteUrls = (sprites: PokemonSprites): string[] => {
   const additionalBacks = getSpritesUrlsByCondition(sprites, (key) => key.startsWith('back_'));
   orderedUrls.push(...additionalBacks);
 
-  return Array.from(new Set(orderedUrls));
+  const uniqueUrls = Array.from(new Set(orderedUrls));
+
+  if (uniqueUrls.length === 0) {
+    // Fallback image
+    return ['https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'];
+  }
+
+  return uniqueUrls;
 };
 
 const getSpritesUrlsByCondition = (obj: unknown, condition: (key: string) => boolean): string[] => {

@@ -33,7 +33,7 @@ export function CardGrid<T extends { id?: string | number }>({
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
-      {true ? (
+      {isFirstLoad ? (
         <div
           role="list"
           className={`flex-1 overflow-y-auto pr-1 grid ${gridColumnsVariant} gap-4 auto-rows-max`}

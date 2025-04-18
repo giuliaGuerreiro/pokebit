@@ -14,7 +14,11 @@ const MyPokemons: React.FC = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1, duration: 0.6, type: 'spring' }}
         >
-          <img src={emptyPokeballImage} alt="Empty pokeball" className="max-w-xs" />
+          <img
+            src={emptyPokeballImage}
+            alt="Empty pokeball"
+            className="w-24 sm:w-32 md:w-52 h-auto mx-auto"
+          />
         </motion.div>
 
         <motion.h1

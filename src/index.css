@@ -27,19 +27,6 @@ img {
 }
 
 @layer components {
-  /* Headings */
-  .heading-1 {
-    @apply text-4xl font-bold text-center mb-4;
-  }
-
-  .heading-2 {
-    @apply text-2xl font-semibold text-center mb-2;
-  }
-
-  .heading-3 {
-    @apply text-lg font-bold capitalize text-center mt-2;
-  }
-
   /* Paragraph */
   .paragraph {
     @apply text-base leading-relaxed text-gray-700;

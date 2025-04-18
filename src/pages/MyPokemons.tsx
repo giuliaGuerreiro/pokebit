@@ -47,7 +47,7 @@ const MyPokemons: React.FC = () => {
           >
             <Link to="/">
               <motion.button
-                className="px-6 py-2 bg-red-500 text-white rounded-xl flex items-center gap-2 font-medium"
+                className="text-sm sm:text-lg px-4 sm:px-6 py-2 bg-red-500 text-white rounded-xl flex items-center gap-2  sm:font-medium"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 17 }}

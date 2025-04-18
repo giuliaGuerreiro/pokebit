@@ -84,7 +84,7 @@ export const PokemonList: React.FC = () => {
   }, [error]);
 
   return (
-    <div className="flex h-full pt-4 overflow-hidden gap-4">
+    <div className="flex h-full overflow-hidden gap-4">
       <Toaster />
 
       {/* Main content - shrinks when details panel is open */}
@@ -97,7 +97,7 @@ export const PokemonList: React.FC = () => {
         transition={{ duration: 0.4, ease: 'easeInOut' }}
       >
         {/* Search input area */}
-        <div className="shrink-0 mb-4 p-1">
+        <div className="shrink-0 p-1">
           <SearchInput
             id="pokemon-search"
             placeholder="Search Pokémon"

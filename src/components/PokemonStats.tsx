@@ -64,7 +64,7 @@ export const PokemonStats: React.FC<IPokemonStatsProps> = ({ name }) => {
     return (
       <div className="flex flex-col justify-center items-center h-full">
         <LoadingSpinner variant="page" />
-        <h3 className="heading-3 mt-4">{`Loading ${name} Details...`}</h3>
+        <h3 className="text-lg font-bold capitalize text-center mt-4">{`Loading ${name} Details...`}</h3>
       </div>
     );
   }

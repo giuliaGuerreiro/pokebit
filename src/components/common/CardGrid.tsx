@@ -71,7 +71,7 @@ export function CardGrid<T extends { id?: string | number }>({
           <Button
             onClick={onLoadMore}
             variant="primary"
-            size="sm"
+            size="md"
             width="w-42"
             isLoading={isLoadingMore}
             isCentralized

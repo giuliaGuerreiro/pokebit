@@ -9,7 +9,7 @@ interface IWebDetailPanelProps {
 
 export const WebDetailPanel: React.FC<IWebDetailPanelProps> = ({ name, onClose }) => (
   <motion.div
-    className="h-full bg-white  shadow-lg p-6 z-50 overflow-y-auto"
+    className="h-full bg-white  shadow-lg p-6 z-50 overflow-y-auto rounded-xl"
     initial={{ width: 0, opacity: 0 }}
     animate={{ width: '500px', opacity: 1 }}
     exit={{ width: 0, opacity: 0 }}

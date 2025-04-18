@@ -209,7 +209,6 @@ const SearchInput: React.FC<SearchInputProps> = ({
             </Button>
           </div>
 
-          {/* TODO: make reusable list */}
           <ul className="py-1">
             {filteredHistory.map((item, index) => (
               <li

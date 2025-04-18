@@ -47,7 +47,6 @@ export const usePokemonList = (limit = 20) => {
         setOffset((prev) => prev + limit);
       }
     } catch (error) {
-      // TODO: Add notification toast
       console.error('Error fetching Pokémon:', error);
       setError('Error fetching Pokémon');
     } finally {

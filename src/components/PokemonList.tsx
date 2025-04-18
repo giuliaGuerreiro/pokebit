@@ -111,7 +111,6 @@ export const PokemonList: React.FC = () => {
           />
         </div>
 
-        {/* TODO: Add url within .env */}
         {/* Cards grid container */}
         <div className="flex-1 overflow-hidden">
           {error ? (

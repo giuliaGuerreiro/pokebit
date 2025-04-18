@@ -8,7 +8,6 @@ const MyPokemons: React.FC = () => {
   return (
     <div className=" h-full p-20">
       <div className="flex flex-col items-center justify-center h-full bg-white rounded-xl">
-        {/* WIP PAGE */}
         <motion.div
           className="flex items-center justify-center mb-6 z-10 "
           initial={{ opacity: 0, scale: 0.8 }}

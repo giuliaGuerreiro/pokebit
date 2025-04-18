@@ -3,7 +3,7 @@ import React from 'react';
 interface IPokemonCardProps {
   name: string;
   imageUrl: string;
-  onClick?: () => void;
+  onClick: () => void;
   isSelected?: boolean;
   cardRef?: React.RefObject<HTMLDivElement | null>;
 }
@@ -20,7 +20,9 @@ export const PokemonCard: React.FC<IPokemonCardProps> = ({
       ref={cardRef}
       onClick={onClick}
       onKeyDown={(event) => {
-        if (event.key === 'Enter' || event.key === ' ') onClick?.();
+        if (event.key === 'Enter' || event.key === ' ') {
+          onClick();
+        }
       }}
       role="button"
       tabIndex={0}

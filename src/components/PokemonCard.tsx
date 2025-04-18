@@ -32,7 +32,7 @@ export const PokemonCard: React.FC<IPokemonCardProps> = ({
     >
       <img src={imageUrl} alt={name} className="w-32 h-32 mx-auto" />
       <h3
-        className="heading-3 text-center text-sm truncate w-full max-w-full break-words"
+        className="font-bold capitalize text-center text-sm truncate w-full max-w-full break-words"
         title={name}
       >
         {name}

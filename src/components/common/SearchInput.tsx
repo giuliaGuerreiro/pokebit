@@ -200,7 +200,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
       {isHistoryEnabled && showHistory && filteredHistory.length > 0 && (
         <div
           ref={dropdownRef}
-          className="absolute z-10 w-[400px] bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+          className="absolute z-10 w-[300px] sm:w-[400px] bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto"
         >
           <div className="flex justify-between items-center px-3 py-2 border-b border-gray-100">
             <span className="text-sm font-medium text-gray-500">Recent searches</span>

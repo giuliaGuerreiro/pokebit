@@ -112,7 +112,7 @@ export const PokemonList: React.FC = () => {
         </div>
 
         {/* Cards grid container */}
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 overflow-hidden pb-16 md:pb-0">
           {error ? (
             <div className="flex flex-col items-center justify-center h-full text-center">
               <FiAlertTriangle size={150} className="text-red-500 mb-4" />

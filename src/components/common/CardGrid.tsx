@@ -67,7 +67,7 @@ export function CardGrid<T extends { id?: string | number }>({
       )}
 
       {onLoadMore && items.length > 0 && (
-        <div className="shrink-0  ">
+        <div className="shrink-0 py-4 sticky bottom-0 bg-white bg-opacity-95 shadow-md rounded-t-lg mt-auto">
           <Button
             onClick={onLoadMore}
             variant="primary"

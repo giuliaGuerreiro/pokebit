@@ -7,7 +7,7 @@ import MyPokemons from './pages/MyPokemons';
 
 const App: React.FC = () => {
   return (
-    <div className="h-screen flex flex-col p-2 sm:p-4 overflow-hidden">
+    <div className="min-h-screen h-screen flex flex-col p-2 sm:p-4 overflow-hidden">
       <Header />
 
       <main className="flex-1 overflow-hidden">

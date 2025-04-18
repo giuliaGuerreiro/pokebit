@@ -83,3 +83,9 @@ img {
     @apply flex-1 overflow-y-auto;
   }
 }
+
+@supports (padding: max(0px)) {
+  .mb-safe {
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  }
+}

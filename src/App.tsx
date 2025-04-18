@@ -3,6 +3,7 @@ import React from 'react';
 import Header from './components/Header';
 import Home from './pages/Home';
 import NotFound from './pages/404';
+import MyPokemons from './pages/MyPokemons';
 
 const App: React.FC = () => {
   return (
@@ -12,6 +13,7 @@ const App: React.FC = () => {
       <main className="flex-1 overflow-hidden">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/pokemons" element={<MyPokemons />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

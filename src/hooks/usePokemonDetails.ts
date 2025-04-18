@@ -14,7 +14,6 @@ export const usePokemonDetails = (name: string) => {
 
       try {
         const result = await fetchPokemonDetails(name);
-        console.log('result', result);
 
         setPokemonDetails(result);
       } catch (err) {

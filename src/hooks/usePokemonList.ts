@@ -43,6 +43,7 @@ export const usePokemonList = (limit = 20) => {
         setOffset((prev) => prev + limit);
       } else {
         const data = await fetchPokemonList(currentOffset, limit);
+
         setPokemons((prev) => [...prev, ...data.results]);
         setOffset((prev) => prev + limit);
       }
